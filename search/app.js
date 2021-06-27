@@ -3,7 +3,7 @@ class FirebaseRepository{
     constructor(){
         this.app = firebase.app();
         this.db = firebase.firestore();
-        this.restaurants = db.collection('restaurants');
+        this.restaurants = this.db.collection('restaurants');
         console.log("Run constructor for firebase");
     }
     retrieveRestaurants(lat,long){
@@ -24,7 +24,12 @@ class FirebaseRepository{
 }
 
 
-new FirebaseRepository();
+
+document.addEventListener("DOMContentLoaded", event =>{
+    new FirebaseRepository();
+    });
+    
+        
 
     
 
