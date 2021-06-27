@@ -98,8 +98,10 @@ function resetSearchResultsDiv(){
 
 function displayListOfMeals(restaurantList,index){
     let mealMap = restaurantList[index].Meals;
+    let mealIndex = 0;
         Object.keys(mealMap).forEach(function (key){
-            createMealDiv(key,mealMap[key],'https://images.unsplash.com/photo-1515544040108-7b81c7bddda9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80');
+            createMealDiv(key,mealMap[key],restaurantList[index].MealImages[mealIndex]);
+            mealIndex++;
     });
 }
 
@@ -173,6 +175,8 @@ async function getRestaurants() {
         FirebaseRepo = new FirebaseRepository();
     }
    listOfRestaurants = await FirebaseRepo.retrieveRestaurants(12,12);
+   console.log("list of restaurants");
+   console.log(listOfRestaurants);
    resetSearchResultsDiv();
    removeMarkers();
    createDivs(listOfRestaurants);

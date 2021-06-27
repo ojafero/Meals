@@ -1,4 +1,4 @@
-const distanceInMiles = 50;
+const distanceInMiles = 1000;
 
 class FirebaseRepository{
     
