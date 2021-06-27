@@ -11,6 +11,10 @@ body {
   margin-left: 15px;
 }
 
+.go-back-button {
+  padding-right: 10px;
+}
+
 .title {
   font-family: Circular Std Medium;
   font-size: 24px;
