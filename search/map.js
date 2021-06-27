@@ -10,16 +10,11 @@ script.async = true;
 window.initMap = function() {
 
   // The location of Uluru
-  const uluru = { lat: -25.344, lng: 131.036 };
+  const losAngeles = { lat: 34.05, lng: -118.2437};
   // The map, centered at Uluru
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 4,
-    center: uluru,
-  });
-  // The marker, positioned at Uluru
-  const marker = new google.maps.Marker({
-    position: uluru,
-    map: map,
+    zoom: 9,
+    center: losAngeles,
   });
 };
 
