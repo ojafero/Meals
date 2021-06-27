@@ -58,8 +58,23 @@ function getReverseGeocodingData(lat, lng) {
             console.log("SUCCESFULL!");
             let address = (results[0].formatted_address);
             searchbar.value = address;
+            addOriginalPositionMarker(userCurrentLatitude,userCurrentLongitude);
+            map.setCenter(new google.maps.LatLng(userCurrentLatitude,userCurrentLongitude));
         }
     });
+}
+
+function addOriginalPositionMarker(lat,long){
+    let latlng = new google.maps.LatLng(lat,long);
+    var marker = new google.maps.Marker({
+        position: latlng,
+        title:"Your Here",
+        animation: google.maps.Animation.DROP,
+        icon: 'homeIcon.png'
+    });
+    // To add the marker to the map, call setMap();
+    marker.setMap(map);
+
 }
 
 
