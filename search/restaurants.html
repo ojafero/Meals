@@ -5,9 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meals</title>
+    <script src="https://kit.fontawesome.com/7196a7967e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css" />
     <script></script>
     <script async defer src="map.js" type="module"></script>
+    <script defer src="retrieveRestaurants.js"> </script>
     <style>
       #sidebar {
         position: absolute;
@@ -42,9 +44,12 @@
   </head>
   <body>
     <div id="sidebar">
-      <div class="title">Restaurants Near You</div>
+      <div class = "top-bar"> 
+        <span class="title">Restaurants Near You</span>
+      </div>
       <form>
-        <input type="text" class="searchbar" id="fname" name="fname" /><br />
+        <input type="text" class="searchbar" id="search"/>
+        <span class="search-icon"><i class="fas fa-location-arrow"></i></span>
       </form>
       <div class="search-results">
         <div class="result-restaurant">
