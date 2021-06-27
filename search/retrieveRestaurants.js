@@ -7,6 +7,7 @@ const restaurantSearchResultsDiv = document.querySelector('.search-results');
 let listOfMarkers = [];
 let listOfRestaurants = [];
 let FirebaseRepo = null;
+let backButton = document.querySelector('.go-back-button');
 const googleMapsKey = "AIzaSyB9Wh5s8bhLl3YtTbWN1ElG0YxT3kg831U";
 
 //import {googleMapsKey} from '../keys.js'; 
@@ -193,3 +194,8 @@ function addMarkersFromRestaurant(restaurantList){
     }
     map.setCenter(new google.maps.LatLng(restaurantList[0].Location._lat,restaurantList[0].Location._long));
 }
+
+backButton.addEventListener('click',()=>{
+    resetSearchResultsDiv();
+    createDivs(listOfRestaurants);
+}); 
