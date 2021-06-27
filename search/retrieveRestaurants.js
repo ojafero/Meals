@@ -1,4 +1,5 @@
 
+
 let userCurrentLatitude = 0;
 let userCurrentLongitude = 0;
 let searchbar = document.querySelector('.searchbar');
@@ -6,6 +7,30 @@ const restaurantSearchResultsDiv = document.querySelector('.search-results');
 let listOfMarkers = [];
 let listOfRestaurants = [];
 let FirebaseRepo = null;
+const googleMapsKey = "AIzaSyB9Wh5s8bhLl3YtTbWN1ElG0YxT3kg831U";
+
+//import {googleMapsKey} from '../keys.js'; 
+
+// Create the script tag, set the appropriate attributes
+let map = null;
+var script = document.createElement('script');
+script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsKey}&callback=initMap`;
+script.async = true;
+
+// Attach your callback function to the `window` object
+window.initMap = function() {
+
+  // The location of Uluru
+  const losAngeles = { lat: 34.05, lng: -118.2437};
+  // The map, centered at Uluru
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 15,
+    center: losAngeles,
+  });
+};
+
+// Append the 'script' element to 'head'
+document.head.appendChild(script);
 
 function fetchUserCurrentLocation(){
     if(navigator.geolocation) navigator.geolocation.getCurrentPosition(function(result){
@@ -38,29 +63,28 @@ function getReverseGeocodingData(lat, lng) {
 
 
 function addMarker(lat,long){
+    console.log("in add marker");
+    console.log(lat)
+    console.log(long);
     let latlng = new google.maps.LatLng(lat,long);
-    var map = new google.maps.Map(document.getElementById("map"));
-    
-    const marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
         position: latlng,
-        title: "Hello World"
+        title:"Hello World!",
+        animation: google.maps.Animation.DROP,
     });
-    listOfMarkers.push(marker);
-
     // To add the marker to the map, call setMap();
     marker.setMap(map);
 
 }
 
 function removeMarkers(){
-    for(let i=0; i<listOfMarkers.size(); i++){
+    for(let i=0; i<listOfMarkers.length; i++){
         listOfMarkers[i].setMap(null);
     }
     listOfMarkers = [];
 }
 
 function getAvailableMealsFromRestaurant(index){
-    alert("clicked");
     if(index < listOfRestaurants.length){
         resetSearchResultsDiv();
         displayListOfMeals(listOfRestaurants,index);
@@ -149,11 +173,9 @@ async function getRestaurants() {
     }
    listOfRestaurants = await FirebaseRepo.retrieveRestaurants(12,12);
    resetSearchResultsDiv();
+   removeMarkers();
    createDivs(listOfRestaurants);
-   //addMarkersFromRestaurant(restaurantList);
-   console.log(listOfRestaurants);
-   //console.log(restaurantList[0].Location._lat);
-   //console.log(restaurantList[0].Location._long);
+   addMarkersFromRestaurant(listOfRestaurants);
 }
 
 function createDivs(restaurantList){
@@ -169,4 +191,5 @@ function addMarkersFromRestaurant(restaurantList){
     for (let i=0; i<restaurantList.length; i++){
         addMarker(restaurantList[i].Location._lat,restaurantList[i].Location._long);
     }
+    map.setCenter(new google.maps.LatLng(restaurantList[0].Location._lat,restaurantList[0].Location._long));
 }
