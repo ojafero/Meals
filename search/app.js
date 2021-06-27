@@ -1,29 +1,30 @@
-document.addEventListener("DOMContentLoaded", event =>{
+class FirebaseRepository{
     
-
-    console.log('Starting Event Listener...');
-
-    const app = firebase.app();
-    console.log(app);
-
-    const db = firebase.firestore();
-
-    const myPost = db.collection('restaurants');
-
-    myPost.get()
+    constructor(){
+        this.app = firebase.app();
+        this.db = firebase.firestore();
+        this.restaurants = db.collection('restaurants');
+        console.log("Run constructor for firebase");
+    }
+    retrieveRestaurants(lat,long){
+        this.restaurants.get()
         .then(querySnapshot => {
           querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.Name, " => ", doc.data());
+            console.log(doc.data());
         });
+        });
+    }
 
-            
-    });
-
-});
-
-function updatePost(e) {
-    const db = firebase.firestore();
-    const myPost = db.collection('restaurants').doc('McDonalds');
-    myPost.update({ title: e.target.value});
+    updatePost(e) {
+        const db = firebase.firestore();
+        const myPost = db.collection('restaurants').doc('McDonalds');
+        myPost.update({ title: e.target.value});
+    }
+    
 }
+
+
+new FirebaseRepository();
+
+    
+
