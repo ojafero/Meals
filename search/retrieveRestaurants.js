@@ -4,6 +4,7 @@ let userCurrentLongitude = 0;
 let searchbar = document.querySelector('.searchbar');
 const restaurantSearchResultsDiv = document.querySelector('.search-results');
 let listOfMarkers = [];
+let listOfRestaurants = [];
 let FirebaseRepo = null;
 
 function fetchUserCurrentLocation(){
@@ -58,9 +59,57 @@ function removeMarkers(){
     listOfMarkers = [];
 }
 
+function getAvailableMealsFromRestaurant(index){
+    alert("clicked");
+    if(index < listOfRestaurants.length){
+        resetSearchResultsDiv();
+        displayListOfMeals(listOfRestaurants,index);
+    }
+}
+
+function resetSearchResultsDiv(){
+    restaurantSearchResultsDiv.innerHTML = '';
+}
+
+function displayListOfMeals(restaurantList,index){
+    let mealMap = restaurantList[index].Meals;
+        Object.keys(mealMap).forEach(function (key){
+            createMealDiv(key,mealMap[key],'https://images.unsplash.com/photo-1515544040108-7b81c7bddda9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80');
+    });
+}
 
 
-function createRestaurantDiv(title,distance,imageUrl){
+
+function createRestaurantDiv(title,distance,imageUrl,index){
+    const restaurantResult= document.createElement('div');
+    restaurantResult.classList.add("result-restaurant");
+
+    const restaurantTitle = document.createElement('div');
+    restaurantTitle.classList.add("restaurant-title");
+
+    const restaurantDistance = document.createElement('div');
+    restaurantDistance.classList.add("restaurant-distance");
+
+    const restaurantImageContainer = document.createElement('span');
+    restaurantImageContainer.classList.add("restaurant-image");
+
+    const img = document.createElement('img');
+    img.setAttribute('src',imageUrl);
+
+    restaurantResult.setAttribute('onclick',`getAvailableMealsFromRestaurant(${index})`);
+
+    restaurantImageContainer.appendChild(img);
+    restaurantResult.appendChild(restaurantTitle);
+    restaurantResult.appendChild(restaurantDistance);
+    restaurantResult.appendChild(restaurantImageContainer);
+
+    restaurantSearchResultsDiv.appendChild(restaurantResult);
+
+    restaurantTitle.innerHTML += title;
+    restaurantDistance.innerHTML += distance + " Miles";
+}
+
+function createMealDiv(title,distance,imageUrl){
     const restaurantResult= document.createElement('div');
     restaurantResult.classList.add("result-restaurant");
 
@@ -84,7 +133,7 @@ function createRestaurantDiv(title,distance,imageUrl){
     restaurantSearchResultsDiv.appendChild(restaurantResult);
 
     restaurantTitle.innerHTML += title;
-    restaurantDistance.innerHTML += distance + " Miles";
+    restaurantDistance.innerHTML += distance + "x Available";
 }
 
 function wrapperFunction(){
@@ -92,14 +141,17 @@ function wrapperFunction(){
 }
 
 
+
+
 async function getRestaurants() {
     if(FirebaseRepo == null){
         FirebaseRepo = new FirebaseRepository();
     }
-   let restaurantList = await FirebaseRepo.retrieveRestaurants(12,12);
-   createDivs(restaurantList);
-   addMarkersFromRestaurant(restaurantList);
-   console.log(restaurantList);
+   listOfRestaurants = await FirebaseRepo.retrieveRestaurants(12,12);
+   resetSearchResultsDiv();
+   createDivs(listOfRestaurants);
+   //addMarkersFromRestaurant(restaurantList);
+   console.log(listOfRestaurants);
    //console.log(restaurantList[0].Location._lat);
    //console.log(restaurantList[0].Location._long);
 }
@@ -109,7 +161,7 @@ function createDivs(restaurantList){
         let name = restaurantList[i].Name;
         let distance = restaurantList[i].distance.toFixed(2);
         let imageUrl = restaurantList[i].RestaurantImage;
-        createRestaurantDiv(name,distance,imageUrl);
+        createRestaurantDiv(name,distance,imageUrl,i);
     }
 }
 
