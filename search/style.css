@@ -45,7 +45,8 @@ body {
   font-family: Circular Std Medium;
   font-size: 20px;
   line-height: 23px;
-  color: #606470;
+  /* color: #606470; */
+  color: black;
 }
 
 .restaurant-distance{
@@ -67,5 +68,12 @@ img {
 
 .restaurant-information{
   display: inline-block;
+}
+
+@font-face{
+  font-family: 'Circular Std Medium';
+  src: url(../fonts/CircularStd-Medium.otf);
+  font-style: normal;
+  font-weight: 100;
 }
 
