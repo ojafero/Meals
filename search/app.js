@@ -44,12 +44,6 @@ class FirebaseRepository{
     
 }
 
-
-
-document.addEventListener("DOMContentLoaded", event =>{
-    createRestaurantDiv();
-});
-    
         
 
     

@@ -37,15 +37,13 @@ function getReverseGeocodingData(lat, lng) {
 
 
 function addMarker(lat,long){
-    let myLatlng = new google.maps.LatLng(lat,long);
+    let latlng = new google.maps.LatLng(lat,long);
     var map = new google.maps.Map(document.getElementById("map"));
-
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        title:"Hello World!"
+    
+    const marker = new google.maps.Marker({
+        position: latlng,
+        title: "Hello World"
     });
-
-
     listOfMarkers.push(marker);
 
     // To add the marker to the map, call setMap();
@@ -62,7 +60,7 @@ function removeMarkers(){
 
 
 
-function createRestaurantDiv(){
+function createRestaurantDiv(title,distance,imageUrl){
     const restaurantResult= document.createElement('div');
     restaurantResult.classList.add("result-restaurant");
 
@@ -76,7 +74,7 @@ function createRestaurantDiv(){
     restaurantImageContainer.classList.add("restaurant-image");
 
     const img = document.createElement('img');
-    img.setAttribute('src',"https://images.unsplash.com/photo-1609428079875-ae186c562aff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1");
+    img.setAttribute('src',imageUrl);
 
     restaurantImageContainer.appendChild(img);
     restaurantResult.appendChild(restaurantTitle);
@@ -85,9 +83,8 @@ function createRestaurantDiv(){
 
     restaurantSearchResultsDiv.appendChild(restaurantResult);
 
-
-    restaurantTitle.innerHTML += "Restaurant Name";
-    restaurantDistance.innerHTML += "Miles";
+    restaurantTitle.innerHTML += title;
+    restaurantDistance.innerHTML += distance + " Miles";
 }
 
 function wrapperFunction(){
@@ -100,7 +97,24 @@ async function getRestaurants() {
         FirebaseRepo = new FirebaseRepository();
     }
    let restaurantList = await FirebaseRepo.retrieveRestaurants(12,12);
+   createDivs(restaurantList);
+   addMarkersFromRestaurant(restaurantList);
    console.log(restaurantList);
    //console.log(restaurantList[0].Location._lat);
    //console.log(restaurantList[0].Location._long);
+}
+
+function createDivs(restaurantList){
+    for (let i=0; i<restaurantList.length; i++){
+        let name = restaurantList[i].Name;
+        let distance = restaurantList[i].distance.toFixed(2);
+        let imageUrl = restaurantList[i].RestaurantImage;
+        createRestaurantDiv(name,distance,imageUrl);
+    }
+}
+
+function addMarkersFromRestaurant(restaurantList){
+    for (let i=0; i<restaurantList.length; i++){
+        addMarker(restaurantList[i].Location._lat,restaurantList[i].Location._long);
+    }
 }
