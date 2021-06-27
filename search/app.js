@@ -1,3 +1,5 @@
+const distanceInMiles = 50;
+
 class FirebaseRepository{
     
     constructor(){
@@ -7,12 +9,31 @@ class FirebaseRepository{
         console.log("Run constructor for firebase");
     }
     retrieveRestaurants(lat,long){
-        this.restaurants.get()
+        let restaurantsList = [];
+        let promise = this.restaurants.get()
         .then(querySnapshot => {
           querySnapshot.forEach((doc) => {
-            console.log(doc.data());
+              let restaurant = doc.data();
+              let distanceBetween = this.getDistance(restaurant.Location._long,restaurant.Location._lat);
+              restaurant['distance']= distanceBetween;
+              if(distanceBetween<distanceInMiles){
+                  console.log("meets distance criteria");
+              }
+              restaurantsList.push(restaurant);
         });
+            return restaurantsList;
         });
+
+        return promise;
+
+
+    }
+    getDistance(destinationLongitude, destinationLatitude){
+        var myLocation = turf.point([userCurrentLongitude, userCurrentLatitude]);
+        var destination = turf.point([destinationLongitude, destinationLatitude]);
+        var metaData = {units: 'miles'};
+        var distance = turf.distance(myLocation, destination,metaData);
+        return distance;
     }
 
     updatePost(e) {
@@ -26,8 +47,8 @@ class FirebaseRepository{
 
 
 document.addEventListener("DOMContentLoaded", event =>{
-    new FirebaseRepository();
-    });
+    createRestaurantDiv();
+});
     
         
 
